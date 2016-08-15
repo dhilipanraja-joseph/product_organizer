@@ -15,7 +15,6 @@ const Root = React.createClass({
     localStorage.products = JSON.stringify(this.state.products);
   },
   addProduct(product) {
-    //console.log("add product",product);
     this.setState({products : this.state.products.concat(product)});
   },
   deleteProduct(id){
@@ -29,7 +28,12 @@ const Root = React.createClass({
       <div>
         <h1>Product Organizer</h1>
         <ProductForm addProduct={this.addProduct}/>
-        <DisplayProducts products={this.state.products} pro={this.state.products} sortByName={this.sortByName} sortByPrice={this.sortByPrice}/>
+        <DisplayProducts
+            products={this.state.products}
+            pro={this.state.products}
+            deleteProduct={this.deleteProduct}
+            modifyProduct={this.modifyProduct}
+        />
       </div>
     );
   }
@@ -101,10 +105,12 @@ const DisplayProducts = React.createClass({
 
     }
   },
-  delete : function(e){
-    this.props.deleteProduct(e.target.value);
+  delete(e){
+    let id = e.target.value;
+    //this.setState({products : this.state.products.filter(product => product.id !== id)});
+    this.props.deleteProduct(id);
   },
-  modify : function(e){
+  modify(e){
     this.props.modifyProduct(e.target.value);
   },
   resetTable(){
@@ -125,7 +131,7 @@ const DisplayProducts = React.createClass({
           <td>{product.name}</td>
           <td>{product.price}</td>
           <td>{product.descr}</td>
-          <td>{product.imgurl}</td>
+          <td><a href={product.imgurl} target="_blank">{product.imgurl}</a></td>
           <td>
             <button onClick={this.delete} value={product.id}>-</button>
             <button onClick={this.modify} value={product.id}>?</button>
