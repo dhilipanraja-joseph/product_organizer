@@ -84,7 +84,7 @@ const ProductForm = React.createClass({
       imgurl : ''
     });
   },
-  addProduct(e){
+  addProduct(){
     //e.preventDefault();
     let product = {
       id : uuid(),
@@ -150,9 +150,14 @@ const DisplayProducts = React.createClass({
     });
   },
   sortByName(){
-    this.props.products.sort((a,b)=>a.name - b.name);
+
     console.log('sort by Name');
     this.setState({
+      products :this.props.products.slice(0).sort((a,b)=>{
+                var x = a.name.toLowerCase();
+                var y = b.name.toLowerCase();
+                return x < y ? -1 : x > y ? 1 : 0;
+                }),
       thName : this.reorderN
     });
   },
@@ -162,7 +167,7 @@ const DisplayProducts = React.createClass({
 
     //console.log(sPros);
     this.setState({
-      products: this.state.products.slice(0).sort((a,b)=>a.price-b.price),
+      products: this.props.products.slice(0).sort((a,b)=>a.price-b.price),
       thPrice : this.reorderP
     });
     //console.log('sortiong by price');
