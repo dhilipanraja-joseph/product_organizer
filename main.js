@@ -32,6 +32,7 @@ const Root = React.createClass({
       <div>
         <h1>Product Organizer</h1>
         <ProductForm addProduct={this.addProduct}/>
+        <DisplayProducts products={this.state.products}/>
       </div>
     );
   }
@@ -63,6 +64,7 @@ const ProductForm = React.createClass({
   addProduct(e){
     e.preventDefault();
     let product = {
+      id : uuid(),
       name : this.state.name,
       price : this.state.price,
       descr : this.state.descr,
@@ -93,7 +95,46 @@ const ProductForm = React.createClass({
 
 
 
-
+const DisplayProducts = React.createClass({
+  sortProName(){
+    console.log('sorting by name');
+  },
+  sortByPrice(){
+    console.log('sortiong by price');
+  },
+  render(){
+    let products = this.props.products.map(product =>{
+      return (
+        <tr key={product.id}>
+          <td>{product.name}</td>
+          <td>{product.price}</td>
+          <td>{product.descr}</td>
+          <td>{product.imgurl}</td>
+          <td>
+            <button onClick={this.delete} value={product.id}>-</button>
+            <button onClick={this.modify} value={product.id}>?</button>
+          </td>
+        </tr>
+      );
+    });
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th onClick={this.sortProName}>Product</th>
+            <th onClick={this.sortByPrice}>Price $</th>
+            <th>Description</th>
+            <th>ImgLink</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+          <tbody>
+            {products}
+          </tbody>
+      </table>
+    );
+  }
+});
 
 
 ReactDOM.render(
