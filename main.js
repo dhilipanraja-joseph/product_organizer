@@ -21,16 +21,24 @@ const Root = React.createClass({
     this.setState({products : this.state.products.filter(product => product.id !== id)});
   },
   modifyProduct(id){
-
+    let index = this.state.products.findIndex(x => x.id ===id);
+    let mProduct = this.state.products;
+    let name = prompt("Change Product Name",mProduct[index].name);
+    let price = prompt("Change Price",mProduct[index].price);
+    let descr = prompt("Change Description",mProduct[index].descr);
+    let imgurl = prompt("Change ImageURL",mProduct[index].imgurl);
+    //let cityObj = {city,state,population};
+    mProduct[index] = {id:uuid(),name,price,descr,imgurl};
+    this.setState({products : mProduct});
   },
   render(){
     return (
       <div>
         <h1>Product Organizer</h1>
         <ProductForm addProduct={this.addProduct}/>
+        <ProductStatus products={this.state.products}/>
         <DisplayProducts
             products={this.state.products}
-            pro={this.state.products}
             deleteProduct={this.deleteProduct}
             modifyProduct={this.modifyProduct}
         />
@@ -41,7 +49,20 @@ const Root = React.createClass({
 
 
 
-
+const ProductStatus = React.createClass({
+  render(){
+    let tValue=0;
+    this.props.products.forEach(pro=>{
+          tValue += parseInt(pro.price);
+    });
+    return (
+      <div><br/>
+        <span>Total Products : {this.props.products.length} </span>
+        <span>Total Value : {tValue}</span><br/>
+      </div>
+    );
+  }
+});
 
 
 const ProductForm = React.createClass({
@@ -113,19 +134,38 @@ const DisplayProducts = React.createClass({
   modify(e){
     this.props.modifyProduct(e.target.value);
   },
-  resetTable(){
-    this.setState({products : this.props.pro , thPrice : this.sortByPrice});
+  reorderP(){
+    console.log('reorder');
+    this.setState({
+      products : this.props.products,
+      thPrice : this.sortByPrice
+    });
+  },
+  reorderN(){
+    console.log('reorder');
+    this.setState({
+      products : this.props.products,
+      thName : this.sortByName
+    });
   },
   sortByName(){
-    this.setState({data : this.state.products.sort((a,b)=>a.name - b.name)});
+    console.log("sort by Name");
+    this.setState({
+      products : this.state.products.sort(),
+      thName : this.reorderN
+    });
   },
   sortByPrice(){
-    this.setState({products : this.state.products.sort((a,b)=>a.price - b.price) , thPrice : this.resetTable});
+    console.log('sort by price');
+    this.setState({
+      products : this.state.products.sort((a,b)=>a.price - b.price),
+      thPrice : this.reorderP
+    });
     //console.log('sortiong by price');
     //this.props.sortByPrice();
   },
   render(){
-    let products = this.state.products.map(product =>{
+    let products = this.props.products.map(product =>{
       return (
         <tr key={product.id}>
           <td>{product.name}</td>
