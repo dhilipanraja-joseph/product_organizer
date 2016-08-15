@@ -13,6 +13,7 @@ const Root = React.createClass({
   },
   componentDidUpdate(){
     localStorage.products = JSON.stringify(this.state.products);
+    location.reload();
   },
   addProduct(product) {
     this.setState({products : this.state.products.concat(product)});
