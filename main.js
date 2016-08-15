@@ -85,7 +85,7 @@ const ProductForm = React.createClass({
     });
   },
   addProduct(e){
-    e.preventDefault();
+    //e.preventDefault();
     let product = {
       id : uuid(),
       name : this.state.name,
@@ -138,37 +138,38 @@ const DisplayProducts = React.createClass({
   reorderP(){
     console.log('reorder');
     this.setState({
-      products : this.props.products,
+      products: this.props.products,
       thPrice : this.sortByPrice
     });
   },
   reorderN(){
     console.log('reorder');
     this.setState({
-      products : this.props.products,
+      products: this.props.products,
       thName : this.sortByName
     });
   },
   sortByName(){
-    console.log(this.state.products.sort());
+    this.props.products.sort((a,b)=>a.name - b.name);
+    console.log('sort by Name');
     this.setState({
-      products : this.state.products.sort(),
       thName : this.reorderN
     });
   },
   sortByPrice(){
     console.log('sort by price');
     //this.state.products.concat().sort((a,b)=>a.price - b.price);
-    this.props.products.sort((a,b)=>a.price-b.price);
+
     //console.log(sPros);
     this.setState({
+      products: this.state.products.slice(0).sort((a,b)=>a.price-b.price),
       thPrice : this.reorderP
     });
     //console.log('sortiong by price');
     //this.props.sortByPrice();
   },
   render(){
-    let products = this.props.products.map(product =>{
+    let products = this.state.products.map(product =>{
       return (
         <tr key={product.id}>
           <td>{product.name}</td>
