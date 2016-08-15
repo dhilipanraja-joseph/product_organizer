@@ -27,7 +27,6 @@ const Root = React.createClass({
     let price = prompt("Change Price",mProduct[index].price);
     let descr = prompt("Change Description",mProduct[index].descr);
     let imgurl = prompt("Change ImageURL",mProduct[index].imgurl);
-    //let cityObj = {city,state,population};
     mProduct[index] = {id:uuid(),name,price,descr,imgurl};
     this.setState({products : mProduct});
   },
@@ -63,6 +62,8 @@ const ProductStatus = React.createClass({
     );
   }
 });
+
+
 
 
 const ProductForm = React.createClass({
@@ -149,7 +150,7 @@ const DisplayProducts = React.createClass({
     });
   },
   sortByName(){
-    console.log("sort by Name");
+    console.log(this.state.products.sort());
     this.setState({
       products : this.state.products.sort(),
       thName : this.reorderN
@@ -157,8 +158,10 @@ const DisplayProducts = React.createClass({
   },
   sortByPrice(){
     console.log('sort by price');
+    //this.state.products.concat().sort((a,b)=>a.price - b.price);
+    this.props.products.sort((a,b)=>a.price-b.price);
+    //console.log(sPros);
     this.setState({
-      products : this.state.products.sort((a,b)=>a.price - b.price),
       thPrice : this.reorderP
     });
     //console.log('sortiong by price');
