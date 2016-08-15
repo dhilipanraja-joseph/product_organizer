@@ -154,9 +154,15 @@ const DisplayProducts = React.createClass({
     console.log('sort by Name');
     this.setState({
       products :this.props.products.slice(0).sort((a,b)=>{
-                var x = a.name.toLowerCase();
-                var y = b.name.toLowerCase();
-                return x < y ? -1 : x > y ? 1 : 0;
+                let x = a.name.toLowerCase();
+                let y = b.name.toLowerCase();
+                  if(x<y){
+                    return -1;
+                  }else if(x>y){
+                    return 1;
+                  }else{
+                    return 0;
+                  }
                 }),
       thName : this.reorderN
     });
