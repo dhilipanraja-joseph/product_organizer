@@ -6,22 +6,19 @@ const Root = React.createClass({
       data = [];
     }
     return{
-      products : data
+      products : data,
+      totalProduct : '',
+      totalPrice : ''
     }
   },
   componentDidUpdate(){
-
-      localStorage.products = JSON.stringify(this.state.products);
+    localStorage.products = JSON.stringify(this.state.products);
   },
   addProduct(product) {
-
-    console.log("add product",product);
-
-      this.setState({products : this.state.products.concat(product)});
-
+    //console.log("add product",product);
+    this.setState({products : this.state.products.concat(product)});
   },
   deleteProduct(id){
-
     this.setState({products : this.state.products.filter(product => product.id !== id)});
   },
   modifyProduct(id){
@@ -32,7 +29,7 @@ const Root = React.createClass({
       <div>
         <h1>Product Organizer</h1>
         <ProductForm addProduct={this.addProduct}/>
-        <DisplayProducts products={this.state.products}/>
+        <DisplayProducts products={this.state.products} pro={this.state.products} sortByName={this.sortByName} sortByPrice={this.sortByPrice}/>
       </div>
     );
   }
@@ -96,14 +93,33 @@ const ProductForm = React.createClass({
 
 
 const DisplayProducts = React.createClass({
-  sortProName(){
-    console.log('sorting by name');
+  getInitialState(){
+    return {
+      products : this.props.products,
+      thName : this.sortByName,
+      thPrice : this.sortByPrice
+
+    }
+  },
+  delete : function(e){
+    this.props.deleteProduct(e.target.value);
+  },
+  modify : function(e){
+    this.props.modifyProduct(e.target.value);
+  },
+  resetTable(){
+    this.setState({products : this.props.pro , thPrice : this.sortByPrice});
+  },
+  sortByName(){
+    this.setState({data : this.state.products.sort((a,b)=>a.name - b.name)});
   },
   sortByPrice(){
-    console.log('sortiong by price');
+    this.setState({products : this.state.products.sort((a,b)=>a.price - b.price) , thPrice : this.resetTable});
+    //console.log('sortiong by price');
+    //this.props.sortByPrice();
   },
   render(){
-    let products = this.props.products.map(product =>{
+    let products = this.state.products.map(product =>{
       return (
         <tr key={product.id}>
           <td>{product.name}</td>
@@ -121,8 +137,8 @@ const DisplayProducts = React.createClass({
       <table>
         <thead>
           <tr>
-            <th onClick={this.sortProName}>Product</th>
-            <th onClick={this.sortByPrice}>Price $</th>
+            <th onClick={this.state.thName}>Product </th>
+            <th onClick={this.state.thPrice}>Price-$ </th>
             <th>Description</th>
             <th>ImgLink</th>
             <th>Edit</th>
